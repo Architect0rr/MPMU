@@ -9,4 +9,4 @@
 # Last modified: 15-04-2024 19:42:03
 
 
-from .utils import is_exe, config, wexec
+from .utils import is_exe, confdict, wexec
