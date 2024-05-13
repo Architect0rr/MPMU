@@ -9,11 +9,28 @@
 # Last modified: 20-04-2024 02:41:15
 
 import os
+import sys
 import shlex
 import string
 import logging
 import subprocess
 from typing import Dict, List
+
+
+def minilog(name: str) -> logging.Logger:
+    logger = logging.getLogger(name)
+    logger.handlers.clear()
+    logger.setLevel(logging.DEBUG)
+    formatter: logging.Formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s')
+    soutHandler = logging.StreamHandler(stream=sys.stdout)
+    soutHandler.setLevel(logging.DEBUG)
+    soutHandler.setFormatter(formatter)
+    logger.addHandler(soutHandler)
+    serrHandler = logging.StreamHandler(stream=sys.stderr)
+    serrHandler.setFormatter(formatter)
+    serrHandler.setLevel(logging.WARNING)
+    logger.addHandler(serrHandler)
+    return logger
 
 
 def wexec(cmd: str, logger: logging.Logger) -> str:
@@ -25,7 +42,7 @@ def wexec(cmd: str, logger: logging.Logger) -> str:
     if proc.returncode != 0:
         logger.error("Process returned non-zero exitcode")
         logger.error("Output from stdout:")
-        logger.error("bout")
+        logger.error(bout)
         logger.error("Output from stderr:")
         logger.error(berr)
         raise RuntimeError("Process returned non-zero exitcode")
